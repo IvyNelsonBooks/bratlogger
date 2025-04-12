@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Brat Logger</title>
+</head>
+<body>
+  <h2>🔧 Test Brat Logger</h2>
+
+  <form id="logForm">
+    <label for="actionType">Action Type:</label><br>
+    <input type="text" id="actionType" name="actionType" value="Punishment"><br><br>
+
+    <label for="message">Message:</label><br>
+    <input type="text" id="message" name="message" value="Failed to show up on time"><br><br>
+
+    <label for="notes">Notes:</label><br>
+    <input type="text" id="notes" name="notes" value="Deadline Daddy is not amused"><br><br>
+
+    <button type="submit">Log It</button>
+  </form>
+
+  <p id="result" style="margin-top: 20px;"></p>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx-o2vtiDNWTmR1e7WA4LU57Kfwre7fEsAH6MZGPVqKZqI-or8LH2oVxd3TYGBmd7WvFQ/exec"; // ← Replace this!
+
+    document.getElementById("logForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const payload = {
+        actionType: document.getElementById("actionType").value,
+        message: document.getElementById("message").value,
+        notes: document.getElementById("notes").value
+      };
+
+      try {
+        const response = await fetch(scriptURL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        document.getElementById("result").textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        document.getElementById("result").textContent = "❌ Error: " + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
